@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zzh-oops.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="从源码安装MAVROS参考其Github链接1. 软件环境说明 树莓派5，4GB版本 Linux raspberrypi 6.6.20+rpt-rpi-2712 Debian 12 bookworm ros debian 1.15.15 gcc 12.2.0, g++ 12.2.0, cmake 3.25.1, python 3.11.2, boost 1.74  2. 配置swap free -">
+<meta property="og:type" content="article">
+<meta property="og:title" content="installation_mavros_on_pi5">
+<meta property="og:url" content="https://zzh-oops.github.io/2026/02/06/installation-mavros-on-pi5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="从源码安装MAVROS参考其Github链接1. 软件环境说明 树莓派5，4GB版本 Linux raspberrypi 6.6.20+rpt-rpi-2712 Debian 12 bookworm ros debian 1.15.15 gcc 12.2.0, g++ 12.2.0, cmake 3.25.1, python 3.11.2, boost 1.74  2. 配置swap free -">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-06T10:16:31.000Z">
+<meta property="article:modified_time" content="2026-02-06T10:17:10.695Z">
+<meta property="article:author" content="zzh">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zzh-oops.github.io/2026/02/06/installation-mavros-on-pi5/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zzh-oops.github.io/2026/02/06/installation-mavros-on-pi5/","path":"2026/02/06/installation-mavros-on-pi5/","title":"installation_mavros_on_pi5"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>installation_mavros_on_pi5 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85MAVROS"><span class="nav-number">1.</span> <span class="nav-text">从源码安装MAVROS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%85%B6Github%E9%93%BE%E6%8E%A5"><span class="nav-number">1.1.</span> <span class="nav-text">参考其Github链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%BD%AF%E4%BB%B6%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E"><span class="nav-number">1.2.</span> <span class="nav-text">1. 软件环境说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AEswap"><span class="nav-number">1.3.</span> <span class="nav-text">2. 配置swap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%BB%88%E7%AB%AF%E5%91%BD%E4%BB%A4"><span class="nav-number">1.4.</span> <span class="nav-text">3. 终端命令</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zzh</p>
+  <div class="site-description" itemprop="description">做人最紧要系开心</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zzh-oops.github.io/2026/02/06/installation-mavros-on-pi5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zzh">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="做人最紧要系开心">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="installation_mavros_on_pi5 | Hexo">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          installation_mavros_on_pi5
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-02-06 18:16:31 / Modified: 18:17:10" itemprop="dateCreated datePublished" datetime="2026-02-06T18:16:31+08:00">2026-02-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="从源码安装MAVROS"><a href="#从源码安装MAVROS" class="headerlink" title="从源码安装MAVROS"></a>从源码安装MAVROS</h3><h4 id="参考其Github链接"><a href="#参考其Github链接" class="headerlink" title="参考其Github链接"></a>参考其<a target="_blank" rel="noopener" href="https://github.com/mavlink/mavros/tree/master/mavros">Github链接</a></h4><h4 id="1-软件环境说明"><a href="#1-软件环境说明" class="headerlink" title="1. 软件环境说明"></a>1. 软件环境说明</h4><ul>
+<li>树莓派5，4GB版本</li>
+<li>Linux raspberrypi 6.6.20+rpt-rpi-2712</li>
+<li>Debian 12 bookworm</li>
+<li>ros debian 1.15.15</li>
+<li>gcc 12.2.0, g++ 12.2.0, cmake 3.25.1, python 3.11.2, boost 1.74</li>
+</ul>
+<h4 id="2-配置swap"><a href="#2-配置swap" class="headerlink" title="2. 配置swap"></a>2. 配置swap</h4><ul>
+<li><code>free -h</code> 查看当前是否有swap，有的话是多大，不是4GB的需要修改</li>
+<li><code>swapon --show</code>查看当前swap文件，如果太小，需要增加</li>
+<li><code>sudo nano /etc/dphys-swapfile</code> 设置CONF_SWAPSIZE&#x3D;4096, CONF_MAXSWAP&#x3D;4096，保存并退出</li>
+<li><code>sudo /etc/init.d/dphys-swapfile restart</code> 重启swap服务</li>
+<li><code>free -h</code> 查看是否生效</li>
+</ul>
+<h4 id="3-终端命令"><a href="#3-终端命令" class="headerlink" title="3. 终端命令"></a>3. 终端命令</h4><ul>
+<li><code>sudo apt update</code> 更新最新源</li>
+<li><code>sudo apt install python3-catkin python3-rosinstall-generator catkin-tools -y</code> 安装catkin工具</li>
+<li><code>mkdir -p ~/catkin_ws_swarm_path_planning/src</code> 创建新工作空间</li>
+<li><code>cd ~/catkin_ws_swarm_path_planning</code></li>
+<li><code>catkin_init_workspace</code> 初始化工作空间</li>
+<li><code>wstool init src</code> 初始化rosinstall工具</li>
+<li><code>rosinstall_generator --rosdistro noetic mavlink | tee /tmp/mavros.rosinstall</code> 将mavlink的github链接添加至暂存文件，使用noetic版本，网络问题多运行几次</li>
+<li><code>rosinstall_generator --rosdistro noetic --upstream mavros | tee -a /tmp/mavros.rosinstall</code> 将mavros的github链接添加至暂存文件，同上</li>
+<li><code>rosinstall_generator --rosdistro noetic control_toolbox | tee -a /tmp/mavros.rosinstall</code> 同上，后续几个为mavros的依赖库</li>
+<li><code>rosinstall_generator --rosdistro noetic geographic_msgs | tee -a /tmp/mavros.rosinstall</code></li>
+<li><code>rosinstall_generator --rosdistro noetic realtime_tools | tee -a /tmp/mavros.rosinstall</code></li>
+<li><code>rosinstall_generator --rosdistro noetic uuid_msgs | tee -a /tmp/mavros.rosinstall</code></li>
+<li><code>rosinstall_generator --rosdistro noetic control_msgs | tee -a /tmp/mavros.rosinstall</code></li>
+<li><code>wstool merge -t src /tmp/mavros.rosinstall</code> 将暂存文件里的所有链接合并至当前工作空间src下的.rosinstall文件</li>
+<li><code>wstool update -t src -j4</code> 根据.rosinstall文件下载所需软件库</li>
+<li><code>rosdep install --from-paths src --ignore-src -y</code> 根据rosdep依赖关系补充安装依赖项，可能报错，需要先<code>rosdep update</code>，网络问题多运行几次</li>
+<li><code>ls /usr/share/GeographicLib</code> 检查是否有Geographiclib所需数据集，没有需下载或拷贝</li>
+<li><code>catkin build</code> 编译工作空间下所有软件</li>
+<li><code>source devel/setup.bash</code> 将可执行文件添加至当前终端命令</li>
+<li><code>roslaunch mavros px4.launch</code> 测试安装是否成功</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/02/06/hello-images/" rel="prev" title="hello-images">
+                  <i class="fa fa-angle-left"></i> hello-images
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zzh</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
